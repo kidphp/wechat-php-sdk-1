@@ -1,5 +1,5 @@
 {
-    "name": "sfnt/wechat-php-sdk",
+    "name": "leozhangch/wechat-php-sdk",
     "description": "a wechat php api",
     "type": "library",
     "version" : "1.1",
@@ -10,7 +10,7 @@
     "license": "LGPL",
     "authors": [
         {
-            "name": "dodgepudding",
+            "name": "leozhangch",
             "email": "dodgepudding@gmail.com"
         }, {
 	    "name" : "binsee",
@@ -21,14 +21,14 @@
 	}
     ],
     "support" : {
-	"issues" : "https://github.com/sfnt/wechat-php-sdk/issues",
-	"wiki" : "https://github.com/sfnt/wechat-php-sdk/wiki",
-	"source" : "https://github.com/sfnt/wechat-php-sdk"
+	"issues" : "https://github.com/leozhangch/wechat-php-sdk/issues",
+	"wiki" : "https://github.com/leozhangch/wechat-php-sdk/wiki",
+	"source" : "https://github.com/leozhangch/wechat-php-sdk"
     },
     "autoload" : {
 	"psr-4" : {
-		"sfnt\\wechat\\sdk\\" : "src/",
-		"sfnt\\wechat\\qy\\sdk\\" : "src/qy/"
+		"leozhangch\\wechat\\sdk\\" : "src/",
+		"leozhangch\\wechat\\qy\\sdk\\" : "src/qy/"
 	}
     }
 }
