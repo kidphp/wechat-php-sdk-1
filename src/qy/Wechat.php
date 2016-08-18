@@ -85,6 +85,8 @@ class Wechat
 	const CALLBACKSERVER_GET_URL = '/getcallbackip?';
 	const OAUTH_PREFIX 			= 'https://open.weixin.qq.com/connect/oauth2';
 	const OAUTH_AUTHORIZE_URL 	= '/authorize?';
+    const AGENT_LIST_URL            = '/agent/list?';
+    const AGENT_URL            = '/agent/get?';
 
 	private $token;
 	private $encodingAesKey;
@@ -1650,7 +1652,7 @@ class Wechat
 	    if ($result)
 	    {
 	        $json = json_decode($result,true);
-	        if (!$json || !empty($json['errcode']) || $json['errcode']!=0) {
+	        if (!$json || (isset($json['errcode']) && (!empty($json['errcode']) || $json['errcode']!=0))) {
 	            $this->errCode = $json['errcode'];
 	            $this->errMsg = $json['errmsg'];
 	            return false;
@@ -2031,6 +2033,103 @@ class Wechat
 	public function getOauthRedirect($callback,$state='STATE',$scope='snsapi_base'){
 	    return self::OAUTH_PREFIX.self::OAUTH_AUTHORIZE_URL.'appid='.$this->appid.'&redirect_uri='.urlencode($callback).'&response_type=code&scope='.$scope.'&state='.$state.'#wechat_redirect';
 	}
+
+    /**
+     * 获取企业号应用
+     * @return boolean|array     成功返回数组结果，这里附上json样例
+     * {
+     *      "errcode": 0,
+     *      "errmsg": "ok",
+     *      "agentlist": [
+     *          {
+     *              "agentid": "5",
+     *              "name": "企业小助手",
+     *              "square_logo_url": "url",
+     *              "round_logo_url": "url"
+     *          },
+     *          {
+     *              "agentid": "8",
+     *              "name": "HR小助手",
+     *              "square_logo_url": "url",
+     *              "round_logo_url": "url"
+     *          }
+     *      ]  
+     * }
+     */
+    public function getAgentList(){
+        if (!$this->access_token && !$this->checkAuth()) return false;
+        $result = $this->http_get(self::API_URL_PREFIX.self::AGENT_LIST_URL.'access_token='.$this->access_token);
+        if ($result)
+        {
+            $json = json_decode($result,true);
+            if (!$json || !empty($json['errcode'])) {
+                $this->errCode = $json['errcode'];
+                $this->errMsg = $json['errmsg'];
+                return false;
+            }
+            return $json;
+        }
+        return false;
+    }
+
+    /**
+     * 获取企业号应用
+     * @param $agentid int
+     * @return boolean|array     成功返回数组结果，这里附上json样例
+     * {
+     *      "errcode":"0",
+     *      "errmsg":"ok" ,
+     *      "agentid":"1" ,
+     *      "name":"NAME" ,
+     *      "square_logo_url":"xxxxxxxx" ,
+     *      "round_logo_url":"yyyyyyyy" ,
+     *      "description":"desc" ,
+     *      "allow_userinfos":{
+     *          "user":[
+     *                {
+     *                    "userid":"id1",
+     *                    "status":"1"
+     *                },
+     *                {
+     *                    "userid":"id2",
+     *                    "status":"1"
+     *                },
+     *                {
+     *                    "userid":"id3",
+     *                    "status":"1"
+     *                }
+     *                 ]
+     *       },
+     *      "allow_partys":{
+     *          "partyid": [1]
+     *       },
+     *      "allow_tags":{
+     *          "tagid": [1,2,3]
+     *       }
+     *      "close":0 ,
+     *      "redirect_domain":"www.qq.com",
+     *      "report_location_flag":0,
+     *      "isreportuser":0,
+     *      "isreportenter":0,
+     *      "chat_extension_url":"http://www.qq.com",
+     *      "type":1
+     *   }
+     */
+    public function getAgent($agentid){
+        if (!$this->access_token && !$this->checkAuth()) return false;
+        $result = $this->http_get(self::API_URL_PREFIX.self::AGENT_URL.'agentid='.$agentid.'&access_token='.$this->access_token);
+        if ($result)
+        {
+            $json = json_decode($result,true);
+            if (!$json || !empty($json['errcode'])) {
+                $this->errCode = $json['errcode'];
+                $this->errMsg = $json['errmsg'];
+                return false;
+            }
+            return $json;
+        }
+        return false;
+    }
 
 }
 
