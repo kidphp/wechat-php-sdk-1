@@ -27,8 +27,8 @@
     },
     "autoload" : {
 	"psr-4" : {
-		"leozhangch\\wechat\\sdk\\" : "src/",
-		"leozhangch\\wechat\\qy\\sdk\\" : "src/qy/"
+		"sfnt\\wechat\\sdk\\" : "src/",
+		"sfnt\\wechat\\qy\\sdk\\" : "src/qy/"
 	}
     }
 }
