@@ -78,6 +78,9 @@ class Wechat
 	const API_URL_PREFIX = 'https://api.weixin.qq.com/cgi-bin';
 	const AUTH_URL = '/token?grant_type=client_credential&';
 	const MENU_CREATE_URL = '/menu/create?';
+    const GROUP_MENU_CREATE_URL = '/menu/addconditional?';
+    const GROUP_MENU_DEL_URL= '/menu/delconditional?';
+    const GROUP_MENU_MATCH_URL= '/menu/trymatch?';
 	const MENU_GET_URL = '/menu/get?';
 	const MENU_DELETE_URL = '/menu/delete?';
 	const GET_TICKET_URL = '/ticket/getticket?';
@@ -1463,6 +1466,57 @@ class Wechat
 		}
 		return false;
 	}
+
+    public function createMenuByGroup($data)
+    {
+        if (!$this->access_token && !$this->checkAuth()) return false;
+        $result = $this->http_post(self::API_URL_PREFIX.self::GROUP_MENU_CREATE_URL.'access_token='.$this->access_token,self::json_encode($data));
+        if ($result)
+        {
+            $json = json_decode($result,true);
+            if (!$json || !empty($json['errcode'])) {
+                $this->errCode = $json['errcode'];
+                $this->errMsg = $json['errmsg'];
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public function delconditionalMenu($data)
+    {
+        if (!$this->access_token && !$this->checkAuth()) return false;
+        $result = $this->http_post(self::API_URL_PREFIX.self::GROUP_MENU_DEL_URL.'access_token='.$this->access_token,self::json_encode($data));
+        if ($result)
+        {
+            $json = json_decode($result,true);
+            if (!$json || !empty($json['errcode'])) {
+                $this->errCode = $json['errcode'];
+                $this->errMsg = $json['errmsg'];
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public function getMatchMenu($data)
+    {
+        if (!$this->access_token && !$this->checkAuth()) return false;
+        $result = $this->http_post(self::API_URL_PREFIX.self::GROUP_MENU_MATCH_URL.'access_token='.$this->access_token,self::json_encode($data));
+        if ($result)
+        {
+            $json = json_decode($result,true);
+            if (!$json || !empty($json['errcode'])) {
+                $this->errCode = $json['errcode'];
+                $this->errMsg = $json['errmsg'];
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
 
 	/**
 	 * 获取菜单(认证后的订阅号可用)
