@@ -1513,7 +1513,7 @@ class Wechat
                 $this->errMsg = $json['errmsg'];
                 return false;
             }
-            return true;
+            return $json;
         }
         return false;
     }
